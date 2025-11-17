@@ -36,7 +36,7 @@ export function AppProvider ({ children }: { children: React.ReactNode }) {
         setData(dbData);
         console.log("Fetched stocks data:", dbData);
 
-        const ws = new WebSocket(process.on.WEBSOCKET_DATA);
+        const ws = new WebSocket(process.env.WEBSOCKET_DATA!);
         ws.onopen = () => {
             console.log("WebSocket connection established Yo");
         };
@@ -88,5 +88,6 @@ export function useApp() {
   }
   return context;
 }
+
 
 
