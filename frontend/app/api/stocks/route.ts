@@ -41,14 +41,27 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data ,{
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*", // <– THIS IS THE FIX
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
 
   } catch (error: any) {
     console.error("Sheets API Error:", error);
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500 ,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+        },
+      }
     );
   }
 }
+
 
