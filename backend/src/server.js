@@ -19,8 +19,7 @@ const server = app.listen(port ,() => {
 stockData(server);
 
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN,
-  credentials: true
+  origin: "*",
 }));
 
 app.use(express.json());
@@ -29,4 +28,5 @@ app.use('/api/stocks',stockRoutes);
 
 process.on('SIGINT',() => disconnectDB('SIGINT'));
 process.on('SIGTERM',() => disconnectDB('SIGTERM'));
+
 
