@@ -31,7 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <nav className="bg-white shadow p-4">
-        <div className="max-w-7xl mx-auto flex gap-20 justify-items-start items-center">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-20 items-center justify-between p-4">
         <a href="/" className="text-xl font-bold text-indigo-600">THE INDIAN WALLSTREET</a>
 
         <div className="space-x-6">
