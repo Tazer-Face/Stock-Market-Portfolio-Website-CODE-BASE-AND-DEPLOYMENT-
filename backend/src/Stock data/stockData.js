@@ -1,5 +1,7 @@
 const { WebSocketServer } = require("ws");
 const yahooFinance = require("yahoo-finance2").default;
+const { GoogleSpreadsheet } = require("google-spreadsheet");
+const { JWT } = require("google-auth-library");
 require('dotenv').config();
 
 module.exports = function (server) {
@@ -39,6 +41,61 @@ module.exports = function (server) {
   let cachedErrors = [];
   let lastFetchTime = 0;
   const CACHE_DURATION = 15000;
+
+  const GOOGLE_CACHE_DURATION = 5 * 60 * 1000;
+  let googleCache = [];
+  let lastGoogleFetch = 0;
+
+  const auth = new JWT({
+    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    key: process.env.GOOGLE_SERVICE_ACCOUNT_KEY.replace(/\\n/g, "\n"),
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
+
+  const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEETS_ID, auth);
+
+  async function loadGoogleSheetData() {
+    const now = Date.now();
+
+    if (now - lastGoogleFetch < GOOGLE_CACHE_DURATION && googleCache.length > 0) {
+      return googleCache;
+    }
+
+    try {
+      await doc.loadInfo();
+      const sheet = doc.sheetsByIndex[0];
+      await sheet.loadCells();
+      const rowCount = sheet.rowCount;
+      const data = []
+  
+      for (let i = 1; i < rowCount; i++) {
+        const company = sheet.getCell(i, 0).value;
+        const sector = sheet.getCell(i, 1).value;
+        const ticker = sheet.getCell(i, 2).value;
+        const pe = sheet.getCell(i, 3).value;
+        const eps = sheet.getCell(i, 4).value;
+  
+        if (!company) continue;
+    
+        data.push({
+            company,
+            sector,
+            ticker,
+            pe,
+            eps,
+          });
+      }
+
+      googleCache = data;
+      lastGoogleFetch = now;
+
+      return data;
+    } catch (err) {
+      console.error("Google Sheets Error:", err);
+      return [];
+    }
+  }
+  
   wss.on("connection", (ws) => {
     console.log("WS client connected");
 
@@ -47,7 +104,7 @@ module.exports = function (server) {
 
         const now = Date.now();
 
-        if (now - lastFetchTime < CACHE_DURATION && cachedFinalData) {
+        if (now - lastFetchTime < CACHE_DURATION && cachedFinalData.length > 0) {
           ws.send(JSON.stringify({
             data: cachedFinalData,
             errors: cachedErrors
@@ -72,17 +129,11 @@ module.exports = function (server) {
           })
           data = {};
         }
-        
-        try{
-          const googleData = await fetch(process.env.GOOGLEDATA);
-          if (!googleData.ok) {
-            throw new Error("Google API returned " + googleData.status);
-          }
-          googleJson = await googleData.json();
-          console.log("Google Sheet Data:", googleJson);
-        }
-        catch(err){
-          console.error("Error fetching Google data:", err);
+
+        try {
+           googleJson = await loadGoogleSheetData();
+        } catch (err) {
+           console.error("Error fetching Google data:", err);
            errors.push({
             source : "Google Sheets",
             message : err.message
@@ -117,7 +168,6 @@ module.exports = function (server) {
         cachedFinalData = finalData;
         cachedErrors = errors;
 
-        console.log(finalData);
         ws.send( JSON.stringify({
           data: finalData,
           error: errors
@@ -127,8 +177,9 @@ module.exports = function (server) {
       }
     };
 
-    setInterval(interval, 15000);
+    const intervalId = setInterval(interval, 15000);
 
-    ws.on("close", () => clearInterval(interval));
+    ws.on("close", () => clearInterval(intervalId));
   });
+
 };
