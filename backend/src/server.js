@@ -9,10 +9,10 @@ require('dotenv').config();
 
 connectDB();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 4005;
 
 const server = app.listen(port ,() => {
-  console.log("App + WebSocket running on port 4005");
+  console.log("App + WebSocket running");
 });
 
 
@@ -30,4 +30,3 @@ app.use('/api/stocks',stockRoutes);
 process.on('SIGINT',() => disconnectDB('SIGINT'));
 process.on('SIGTERM',() => disconnectDB('SIGTERM'));
 
-app.listen(3000,()=>{console.log("server running on port 3000")});
