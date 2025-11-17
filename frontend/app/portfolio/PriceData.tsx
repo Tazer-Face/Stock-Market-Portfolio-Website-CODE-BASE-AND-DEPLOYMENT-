@@ -10,9 +10,9 @@ const priceData = React.memo(function priceData({stock}:any) {
         return stock.purchasePrice * stock.quantity;
     },[stock.purchasePrice, stock.quantity]);
 
-    const currentMarketPrice = useMemo (() =>{
-        return stock.price * stock.quantity;
-    },[stock.price, stock.quantity]);
+   const currentMarketPrice = useMemo (() =>{
+       return stock.price > 0 ? stock.price : stock.previousClose;
+    },[stock.price]);
 
     const currMarkPriceClass = useMemo (() =>{
         return stock.price > 0
@@ -83,5 +83,6 @@ const priceData = React.memo(function priceData({stock}:any) {
           </>
     );
 });
+
 
 export default priceData;
