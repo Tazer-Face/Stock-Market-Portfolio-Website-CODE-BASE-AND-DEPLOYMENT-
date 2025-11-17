@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JWT } from "google-auth-library";
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export async function GET() {
   try {
 
@@ -41,16 +47,17 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+      status: 200,
+      headers: CORS_HEADERS,
+    });
 
   } catch (error: any) {
     console.error("Sheets API Error:", error);
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500  ,
+        headers: CORS_HEADERS}
     );
   }
 }
-
-
-
