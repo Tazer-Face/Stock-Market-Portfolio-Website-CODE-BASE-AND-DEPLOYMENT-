@@ -1,26 +1,23 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)", // apply to all routes
+        source: "/(.*)",
         headers: [
           {
             key: "Content-Security-Policy",
-            value: `
-              default-src 'self';
-              connect-src 'self' https://stock-market-portfolio-website-code-base.onrender.com wss://stock-market-portfolio-website-code-base.onrender.com;
-              img-src 'self' data:;
-              script-src 'self';
-              style-src 'self' 'unsafe-inline';
-            `.replace(/\n/g, " "),
-          },
-        ],
-      },
-    ];
-  },
-};
+            value: [
+              "default-src 'self';",
+              "connect-src 'self' https://stock-market-portfolio-website-code-base.onrender.com wss://stock-market-portfolio-website-code-base.onrender.com;",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval';",
+              "style-src 'self' 'unsafe-inline';",
+              "img-src 'self' data:;",
+            ].join(" "),
+          }
+        ]
+      }
+    ]
+  }
+}
 
 export default nextConfig;
