@@ -64,7 +64,7 @@ export default async function PortfolioPage() {
         <section className="bg-white shadow rounded-xl p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Portfolio Holdings</h2>
           <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-white z-10">
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Purchase Price</TableHead>
@@ -90,4 +90,5 @@ export default async function PortfolioPage() {
   );
 
 }
+
 
