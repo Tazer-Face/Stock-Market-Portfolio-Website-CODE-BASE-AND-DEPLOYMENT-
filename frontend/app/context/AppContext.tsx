@@ -17,7 +17,7 @@ export function AppProvider ({ children }: { children: React.ReactNode }) {
       try {
         let dbData: any[]= [];
         try{
-            const res = await fetch(process.env.NEXT_PUBLIC_STOCK_DATA, {
+            const res = await fetch(process.env.NEXT_PUBLIC_STOCK_DATA!, {
               cache: "force-cache",
             });
             if (!res.ok) {
@@ -88,4 +88,5 @@ export function useApp() {
   }
   return context;
 }
+
 
