@@ -7,7 +7,7 @@ export async function GET() {
 
     const auth = new JWT({
       email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL!,
-      key: process.env.GOOGLE_SERVICE_ACCOUNT_KEY!.replace(/\\n/g, "\n"),
+      key: process.env.GOOGLE_SERVICE_ACCOUNT_KEY!,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
 
@@ -51,3 +51,4 @@ export async function GET() {
     );
   }
 }
+
