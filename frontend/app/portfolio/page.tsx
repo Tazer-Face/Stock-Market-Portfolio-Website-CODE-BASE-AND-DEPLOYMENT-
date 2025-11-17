@@ -15,7 +15,7 @@ export default async function PortfolioPage() {
 
   let data : any[]= [];
   try {
-    const res = await fetch(process.env.NEXT_PUBLIC_STOCK_DATA, {
+    const res = await fetch(process.env.NEXT_PUBLIC_STOCK_DATA!, {
       cache: "force-cache",
     });
 
@@ -90,3 +90,4 @@ export default async function PortfolioPage() {
   );
 
 }
+
