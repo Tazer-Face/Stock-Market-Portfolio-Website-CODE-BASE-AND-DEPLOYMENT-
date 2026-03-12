@@ -219,6 +219,7 @@ module.exports = function (server) {
 
       const finalData = arr.map((item) => {
         const sheetItem = googleMap.get(normalize(item.ticker));
+        console.log(sheetItem)
         return sheetItem
           ? { ...item, pe: sheetItem.pe, eps: sheetItem.eps }
           : item;
@@ -242,4 +243,5 @@ module.exports = function (server) {
     }
   };
 };
+
 
