@@ -3,23 +3,31 @@
 import React, { useMemo } from "react";
 import { useApp } from "../context/AppContext";
 
-function HeaderLiveDataComponent() {
-  const { data } = useApp();
+function HeaderLiveData() {
+  const { portfolio , marketData} = useApp();
+
 
   const { currentValue, investment, gains, currentValueFormatted } = useMemo(() => {
     let currentValue = 0;
     let investment = 0;
+    if(portfolio.length > 0){
+      for(const stock of portfolio) {
+      const market = marketData[stock.ticker];
+      const cmp = !market?.price ? 0 :  market?.price > 0 ? market.price : market?.previousClose;
+      
+      const qty = stock.quantity || 0;
 
-    for (const stock of data) {
-      const cmp = stock.price > 0 ? stock.price : stock.previousClose;
-      currentValue += cmp * stock.quantity;
-      investment += stock.purchasePrice * stock.quantity;
+      currentValue += cmp * qty;
+      investment += (stock.purchasePrice || 0) * qty;
     }
+    }
+    
 
     const gains =
-      investment > 0
+      investment > 0 && currentValue > 0
         ? (((currentValue - investment) / investment) * 100)
-        : 0;
+        : null;
+
 
     const currentValueFormatted = currentValue.toLocaleString("en-IN", {
       minimumFractionDigits: 2,
@@ -27,7 +35,7 @@ function HeaderLiveDataComponent() {
     });
 
     return { currentValue, investment, gains, currentValueFormatted };
-  }, [data]);
+  }, [portfolio , marketData]);
 
   return (
     <>
@@ -49,15 +57,15 @@ function HeaderLiveDataComponent() {
         <p className="text-sm text-gray-500">Total Gain</p>
         <p
           className={`text-2xl font-semibold ${
-            gains.toFixed(2).startsWith("-") ? "text-red-600" : "text-green-600"
+            gains !== null && gains < 0  ? "text-red-600" : "text-green-600"
           }`}
         >
-          {investment > 0 && !isNaN(gains) ? `${gains.toFixed(2)}%` : "Loading..."}
+          { gains !== null ? `${gains.toFixed(2)}%` : "Loading..."}
         </p>
       </div>
     </>
   );
 };
 
-const HeaderLiveData = React.memo(HeaderLiveDataComponent);
+
 export default HeaderLiveData;
