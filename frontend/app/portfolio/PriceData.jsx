@@ -1,10 +1,9 @@
 "use client";
 
-import React, { use, useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { TableRow, TableCell } from "@/components/ui/table";
-import { useApp } from "../context/AppContext";
 
-const priceData = React.memo(function priceData({stock}:any) {
+const priceData = React.memo(function priceData({stock}) {
 
     const investment = useMemo( () =>{
         return stock.purchasePrice * stock.quantity;
@@ -12,7 +11,7 @@ const priceData = React.memo(function priceData({stock}:any) {
 
    const currentMarketPrice = useMemo (() =>{
        return stock.price > 0 ? stock.price : stock.previousClose;
-    },[stock.price]);
+    },[stock.price,stock.previousClose]);
 
     const currMarkPriceClass = useMemo (() =>{
         return stock.price > 0
@@ -46,13 +45,13 @@ const priceData = React.memo(function priceData({stock}:any) {
     const pe = useMemo(() =>{
         return  stock.price >0 ?
                 isNaN(stock.pe) ? "-" : stock.pe
-                : "Loading...";
+                : "...loading";
     },[stock.pe]);
 
     const eps = useMemo(() =>{
         return  stock.price >0 ?
                 isNaN(stock.eps) ? "-" : stock.eps
-                : "Loading...";
+                : "...loading";
     },[stock.eps]);
 
     return(
@@ -65,13 +64,28 @@ const priceData = React.memo(function priceData({stock}:any) {
                 <TableCell>{stock.portfolioPer}</TableCell>
                 <TableCell>{stock.sec}</TableCell>
                 <TableCell className = {currMarkPriceClass}>
-                    {stock.price <=0 ? "Loading..." : currentMarketPrice.toFixed(2)}
+                   {stock.price === null
+                    ? "-"
+                    : stock.price <= 0
+                    ? "...loading"
+                    : currentMarketPrice.toFixed(2)
+                    }
                 </TableCell>
                 <TableCell className = {presentValueClass}>
-                    {stock.price <=0 ? "Loading..." : presentValue.toFixed(2)}
+                    {stock.price === null
+                    ? "-"
+                    : stock.price <= 0
+                    ? "...loading"
+                    : presentValue.toFixed(2)
+                    }
                 </TableCell>
                 <TableCell className= {gainLossClass}>
-                    { stock.price <=0 ? "Loading..." : gainLoss.toFixed(2)}
+                    {stock.price === null
+                    ? "-"
+                    : stock.price <= 0
+                    ? "...loading"
+                    : gainLoss.toFixed(2)
+                    }
                 </TableCell>
                 <TableCell>
                     {pe}
