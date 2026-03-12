@@ -18,7 +18,7 @@ export function AppProvider({ children }) {
 
         try {
           const res = await fetch(
-            process.env.NEXT_PUBLIC_STOCK_DATA!,
+            process.env.NEXT_PUBLIC_STOCK_DATA,
             { cache: "force-cache" }
           );
 
@@ -41,7 +41,7 @@ export function AppProvider({ children }) {
         setPortfolio(dbData);
         console.log("Fetched portfolio data:", dbData);
 
-        const ws = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_DATA!);
+        const ws = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_DATA);
         wsRef.current = ws;
 
         ws.onopen = () => {
@@ -121,3 +121,4 @@ export function useApp() {
 
   return context;
 }
+
