@@ -8,12 +8,12 @@ import {
   TableHead
   } from "@/components/ui/table";
 import LiveData from "./liveData";
-import HeaderLiveDataWrapper from "./headerLiveDataWrapper";
+import HeaderLiveData from "./headerLiveData";
 
 
 export default async function PortfolioPage() {
 
-  let data : any[]= [];
+  let data = [];
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_STOCK_DATA!, {
       cache: "force-cache",
@@ -28,7 +28,7 @@ export default async function PortfolioPage() {
 
   } catch (err) {
     console.error("Error fetching stocks data:", err);
-    alert("⚠ Failed to fetch stock data. Please try again later.");
+    //alert("⚠ Failed to fetch stock data. Please try again later.");
     data = [];
   }
 
@@ -54,7 +54,7 @@ export default async function PortfolioPage() {
             <p className="text-sm text-gray-500">Invested Value</p>
             <p className="text-2xl  text-gray-500">₹ <span className="text-2xl font-semibold text-indigo-600">{formatted}</span></p>
           </div>
-          <HeaderLiveDataWrapper />
+          <HeaderLiveData />
           <div className="bg-white rounded-xl shadow p-5">
             <p className="text-sm text-gray-500">Holdings</p>
             <p className="text-2xl font-semibold text-gray-900">{data.length}</p>
