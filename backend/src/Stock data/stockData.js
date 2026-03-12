@@ -52,6 +52,10 @@ module.exports = function (server) {
     return tickerAlias[t] || t;
   };
 
+  function sanitize(value) {
+    return typeof value === "object" ? null : value;
+  }
+
   let cachedFinalData = [];
   let cachedErrors = [];
 
@@ -85,8 +89,8 @@ module.exports = function (server) {
         const company = sheet.getCell(i, 0).value;
         const sector = sheet.getCell(i, 1).value;
         const ticker = sheet.getCell(i, 2).value;
-        const pe = sheet.getCell(i, 3).value ;
-        const eps = sheet.getCell(i, 4).value ;
+        const pe = sanitize(sheet.getCell(i, 3).value);
+        const eps = sanitize(sheet.getCell(i, 4).value);
 
         if (!company) continue;
 
@@ -244,6 +248,7 @@ module.exports = function (server) {
     }
   };
 };
+
 
 
 
