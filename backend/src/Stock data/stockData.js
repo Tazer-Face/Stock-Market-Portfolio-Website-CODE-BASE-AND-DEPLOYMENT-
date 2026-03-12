@@ -105,11 +105,11 @@ module.exports = function (server) {
 
       rows.forEach((row) => {
         sheetMap.set(normalize(row.ticker), {
-          company: row.company,
-          sector: row.sector,
-          ticker: row.ticker,
-          pe: row.pe,
-          eps: row.eps,
+          company: row.Company,
+          sector: row.Sector,
+          ticker: row.Ticker,
+          pe: row.PE,
+          eps: row.EPS,
         });
       });
 
@@ -242,3 +242,4 @@ module.exports = function (server) {
     }
   };
 };
+
