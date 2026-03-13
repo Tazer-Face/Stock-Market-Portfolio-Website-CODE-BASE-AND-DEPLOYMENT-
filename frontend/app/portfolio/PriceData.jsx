@@ -46,7 +46,7 @@ const priceData = React.memo(function priceData({stock}) {
       () =>
         stock.price > 0
           ? (stock.pe == null || Number.isNaN(stock.pe) ? "-" : stock.pe)
-          : (stock.pe == null || Number.isNaN(stock.pe) ? "-" : stock.pe) : "...loading",
+          : (stock.pe == null || Number.isNaN(stock.pe) ? "-" : "...loading") ,
       [stock.price, stock.pe]
     );
 
@@ -104,6 +104,7 @@ const priceData = React.memo(function priceData({stock}) {
 
 
 export default priceData;
+
 
 
 
