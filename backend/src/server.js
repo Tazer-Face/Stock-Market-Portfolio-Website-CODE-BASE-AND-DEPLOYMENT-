@@ -9,6 +9,11 @@ require('dotenv').config();
 
 connectDB();
 
+app.use(cors({
+  origin: process.env.CLIENT_ORIGIN,
+  credentials: true
+}));
+
 const port = process.env.PORT || 4005;
 
 const server = app.listen(port ,() => {
@@ -18,17 +23,13 @@ const server = app.listen(port ,() => {
 
 stockData(server);
 
-app.use(cors({
-  origin: process.env.CLIENT_ORIGIN,
-  credentials: true
-}));
-
 app.use(express.json());
 
 app.use('/api/stocks',stockRoutes);
 
 process.on('SIGINT',() => disconnectDB('SIGINT'));
 process.on('SIGTERM',() => disconnectDB('SIGTERM'));
+
 
 
 
