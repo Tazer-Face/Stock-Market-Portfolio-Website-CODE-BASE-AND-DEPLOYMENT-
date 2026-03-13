@@ -81,42 +81,42 @@ module.exports = function (server) {
     try {
       await doc.loadInfo();
       const sheet = doc.sheetsByIndex[0];
-      await sheet.loadCells();
-      const rowCount = sheet.rowCount;
-      let sheetMap = new Map();
-
-      for (let i = 1; i < rowCount; i++) {
-        const company = sheet.getCell(i, 0).value;
-        const sector = sheet.getCell(i, 1).value;
-        const ticker = sheet.getCell(i, 2).value;
-        const pe = sanitize(sheet.getCell(i, 3).value);
-        const eps = sanitize(sheet.getCell(i, 4).value);
-
-        if (!company) continue;
-
-         sheetMap.set(normalize(ticker), {
-          company: company,
-          sector: sector,
-          ticker: ticker,
-          pe: pe,
-          eps: eps,
-        });
-      }
-
-
+      // await sheet.loadCells();
+      // const rowCount = sheet.rowCount;
       // let sheetMap = new Map();
 
-      // const rows = await sheet.getRows();
+      // for (let i = 1; i < rowCount; i++) {
+      //   const company = sheet.getCell(i, 0).value;
+      //   const sector = sheet.getCell(i, 1).value;
+      //   const ticker = sheet.getCell(i, 2).value;
+      //   const pe = sanitize(sheet.getCell(i, 3).value);
+      //   const eps = sanitize(sheet.getCell(i, 4).value);
 
-      // rows.forEach((row) => {
-      //   sheetMap.set(normalize(row.ticker), {
-      //     company: row.Company,
-      //     sector: row.Sector,
-      //     ticker: row.Ticker,
-      //     pe: row.PE,
-      //     eps: row.EPS,
+      //   if (!company) continue;
+
+      //    sheetMap.set(normalize(ticker), {
+      //     company: company,
+      //     sector: sector,
+      //     ticker: ticker,
+      //     pe: pe,
+      //     eps: eps,
       //   });
-      // });
+      // }
+
+
+      let sheetMap = new Map();
+
+      const rows = await sheet.getRows();
+
+      rows.forEach((row) => {
+        sheetMap.set(normalize(row.Ticker), {
+          company: row.Company,
+          sector: row.Sector,
+          ticker: row.Ticker,
+          pe: sanitize(row.PE),
+          eps: sanitize(row.EPS),
+        });
+      });;
 
       // const data = rows.map((row) => ({
       //   company: row.company,
@@ -248,6 +248,7 @@ module.exports = function (server) {
     }
   };
 };
+
 
 
 
