@@ -43,19 +43,22 @@ const priceData = React.memo(function priceData({stock}) {
     },[presentValue, investment]);
 
     const pe =
-      stock.pe == null || Number.isNaN(stock.pe)
+      stock.price === undefined
+        ? "...loading"
+        : stock.price === null
         ? "-"
-        : stock.price > 0
-        ? stock.pe
-        : "...loading";
-
+        : stock.pe == null || Number.isNaN(stock.pe)
+        ? "-"
+        : stock.pe;
     const eps = 
-        stock.eps == null || Number.isNaN(stock.eps)
+       stock.price === undefined
+        ? "...loading"
+        : stock.price === null
         ? "-"
-        : stock.price > 0
-        ? stock.eps
-        : "...loading";
-
+        : stock.eps == null || Number.isNaN(stock.eps)
+        ? "-"
+        : stock.eps;
+    
     return(
         <>
               <TableRow key={stock._id}>
@@ -102,6 +105,7 @@ const priceData = React.memo(function priceData({stock}) {
 
 
 export default priceData;
+
 
 
 
