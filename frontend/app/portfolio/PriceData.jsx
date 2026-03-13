@@ -51,7 +51,7 @@ const priceData = React.memo(function priceData({stock}) {
         ? "-"
         : stock.pe;
     const eps = 
-       stock.price === undefined || stock.price < 0
+         !stock.price 
         ? "...loading"
         : stock.price === null
         ? "-"
@@ -105,6 +105,7 @@ const priceData = React.memo(function priceData({stock}) {
 
 
 export default priceData;
+
 
 
 
