@@ -9,7 +9,7 @@ const formatCurrency = (x) =>
     maximumFractionDigits: 2,
   });
 
-const Sectors = React.memo(function Sectors() {
+function Sectors() {
   const { portfolio, marketData } = useApp();
   const [sector, setSector] = useState("");
 
@@ -161,6 +161,7 @@ const Sectors = React.memo(function Sectors() {
       </div>
     </main>
   );
-});
+};
 
 export default Sectors;
+
