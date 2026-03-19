@@ -103,29 +103,6 @@ module.exports = function (server) {
         });
       }
 
-
-      // let sheetMap = new Map();
-
-      // const rows = await sheet.getRows();
-
-      // rows.forEach((row) => {
-      //   sheetMap.set(normalize(row.Ticker), {
-      //     company: row.Company,
-      //     sector: row.Sector,
-      //     ticker: row.Ticker,
-      //     pe: sanitize(row.PE),
-      //     eps: sanitize(row.EPS),
-      //   });
-      // });;
-
-      // const data = rows.map((row) => ({
-      //   company: row.company,
-      //   sector: row.sector,
-      //   ticker: row.ticker,
-      //   pe: row.pe,
-      //   eps: row.eps,
-      // }));
-
       googleCache = sheetMap;
       lastGoogleFetch = now;
 
@@ -189,13 +166,6 @@ module.exports = function (server) {
         });
         googleMap = new Map();
       }
-
-      // const arr = Object.values(data || {}).map((res) => ({
-      //     ticker: res.symbol,
-      //     price: res.regularMarketPrice,
-      //     name: res.shortName,
-      //     previousClose : res.regularMarketPreviousClose,
-      // }));
 
       let rawData = new Map();
 
